@@ -26,3 +26,6 @@ cmc_token = ''
 3. **Select the addresses of NFT collections to track by changing the collections_list.**
 
 You can change the time cutoff data at any time by changing the number in lastUtime to the date and time you need in unix format.
+
+Was the bot helpful to you? I am very happy, if it is ^^
+For donations - EQC7QQ4yZGuNr-qJYOcg-w8hP7EdF29rok-d84fXTKRuUq0-
