@@ -51,10 +51,10 @@ async def markets_tr(market):
         if response['exit_code'] == 0:
             sale_contract_data = parse_sale_stack(response['stack'])
 
-            if not sale_contract_data[1]:
+            if sale_contract_data is not None and not sale_contract_data[1]:
                 sale_nft_data = get_nft_data(sale_contract_data[4])
 
-                if sale_nft_data[0] in collections_list:
+                if sale_nft_data is not None and sale_nft_data[0] in collections_list:
                     collection_floor_data = get_collection_floor(sale_nft_data[0])
 
                     if sale_contract_data[0] == 'SaleFixPrice':
