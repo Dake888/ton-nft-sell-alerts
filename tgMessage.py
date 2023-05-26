@@ -20,6 +20,28 @@ def tg_message(action, market_address, nft_address, real_owner, price_ton, nft_n
     else:
         price_usd_text = ''
 
+    if floor_ton is not None:
+        floor_usd = convert_ton_to_usd(floor_ton)
+
+        if floor_usd is not None:
+            floor_usd_text = f' (${floor_usd})'
+
+        else:
+            floor_usd_text = ''
+
+        floor_text = f'🔽 <b>Current <a href="{market_link}{floor_link}">floor</a>:</b> {floor_ton} TON{floor_usd_text}'
+
+        if price_ton <= float(floor_ton) * 1.1:
+            emoji = '🔥'
+            tag = '#HotPrice'
+
+        elif price_ton >= floor_ton * 2:
+            emoji = '🔝'
+            tag = '#UpTheFloor'
+
+    else:
+        floor_text = ''
+        
     if action == 'SaleFixPrice':
         action_message = f'{emoji} On sale for <b>{price_ton} TON{price_usd_text} on {market_name}</b>\n\n'
         action_tag = 'Sale'
@@ -54,28 +76,6 @@ def tg_message(action, market_address, nft_address, real_owner, price_ton, nft_n
                          f'{min_step_text}' \
                          f'Will end on: {end_time}</i>\n\n'
         action_tag = 'Auction'
-
-    if floor_ton is not None:
-        floor_usd = convert_ton_to_usd(floor_ton)
-
-        if floor_usd is not None:
-            floor_usd_text = f' (${floor_usd})'
-
-        else:
-            floor_usd_text = ''
-
-        floor_text = f'🔽 <b>Current <a href="{market_link}{floor_link}">floor</a>:</b> {floor_ton} TON{floor_usd_text}'
-
-        if price_ton <= float(floor_ton) * 1.1:
-            emoji = '🔥'
-            tag = '#HotPrice'
-
-        elif price_ton >= floor_ton * 2:
-            emoji = '🔝'
-            tag = '#UpTheFloor'
-
-    else:
-        floor_text = ''
 
     if real_owner is not None:
         seller_text = f'🛒 <b><i><a href="{getgems_user_url}{real_owner}">Link</a> to the sellers Getgems</i></b>\n\n'

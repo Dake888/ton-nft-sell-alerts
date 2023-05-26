@@ -7,8 +7,7 @@ from tonsdk.utils import from_nano
 from config import tonapi_url, tonapi_header, getgems_api_url, getgems_query
 
 
-def get_nft_data(nft_address, collection_address=None, collection_name=None, preview_link=None, nft_name=None,
-                 image_link=None, nft_attributes=None):
+def get_nft_data(nft_address):
     try:
         response = json.loads(requests.get(f'{tonapi_url}nft/getItems',
                                            params={'addresses': nft_address},
@@ -30,7 +29,7 @@ def get_nft_data(nft_address, collection_address=None, collection_name=None, pre
         print(f'\nGET_NFT_DATA FAILED\nSome problems with {nft_address} NFT. Check the logs!\n\nError: {e}\n')
 
 
-def get_collection_floor(col_address, floor_price=None, floor_link=None):
+def get_collection_floor(col_address):
     try:
         json_data = {'operationName': 'nftSearch',
                      'query': getgems_query,
@@ -49,9 +48,8 @@ def get_collection_floor(col_address, floor_price=None, floor_link=None):
 
             floor_price = from_nano(int(item['node']['sale']['fullPrice']), 'ton')
             floor_link = item['node']['address']
-            break
-
-        return floor_price, floor_link
+            
+            return floor_price, floor_link
 
     except Exception as e:
         print(f'\nGET COLLECTION FLOOR FAILED\nSome problems with {col_address} collection. '
