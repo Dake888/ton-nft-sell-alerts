@@ -18,10 +18,11 @@ tonorg_price_url = 'https://ton.org/getpriceg/'
 notify_chat = ''
 
 markets_list = [
-                #'EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS',  # Getgems Sales
-                #'EQCjc483caXMwWw2kwl2afFquAPO0LX1VyZbnZUs3toMYkk9',  # Getgems Auction
-                #'EQCgRvXbOJeFSRKnEg1D-i0SqDMlaNVGvpSSKCzDQU_wDAR4',  # Tonex
-                #'EQAezbdnLVsLSq8tnVVzaHxxkKpoSYBNnn1673GXWsA-Lu_w',  # TD Market
+                # 'EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS',  # Getgems Offers
+                # 'EQCjc483caXMwWw2kwl2afFquAPO0LX1VyZbnZUs3toMYkk9',  # Getgems Sales and Auctions ???
+                # 'EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR',  # Getgems
+                # 'EQCgRvXbOJeFSRKnEg1D-i0SqDMlaNVGvpSSKCzDQU_wDAR4',  # Tonex
+                # 'EQAezbdnLVsLSq8tnVVzaHxxkKpoSYBNnn1673GXWsA-Lu_w',  # TD Market
                 # 'EQDrLq-X6jKZNHAScgghh0h1iog3StK71zn8dcmrOj8jPWRA',  # Disintar
                 ]
 
