@@ -1,14 +1,15 @@
 import requests
 import json
 
-from tonsdk.utils import from_nano, b64str_to_bytes
+from telepot.namedtuple import InlineKeyboardButton, InlineKeyboardMarkup
+from tonsdk.utils import from_nano, to_nano, b64str_to_bytes
 from ton.utils import read_address
 from tonsdk.boc import Cell
 
-from config import cmc_url, cmc_params, cmc_headers, tonorg_price_url
+from config import cmc_url, cmc_params, cmc_headers, tonorg_price_url, markets, markets_links, td_collections
 
 
-def parse_sale_stack(stack):
+async def parse_sale_stack(stack):
     if stack[0][1] == '0x415543':
         return parse_auction_stack(stack)
     action = 'SaleFixPrice'
@@ -25,7 +26,7 @@ def parse_sale_stack(stack):
     return action, is_complete, created_at, marketplace_address, nft_address, nft_owner_address, full_price
 
 
-def parse_auction_stack(stack):
+async def parse_auction_stack(stack):
     action = 'SaleAuction'
     is_end = bool(int(stack[1][1], 16))
     created_at = int(stack[17][1], 16)
@@ -47,18 +48,17 @@ def parse_auction_stack(stack):
         min_step, last_bid_at, last_member, last_bid, is_canceled, end_time
 
 
-def convert_ton_to_usd_old(ton):
+async def convert_ton_to_usd_old(ton):
     try:
         usd = json.loads(requests.get(tonorg_price_url).text)['the-open-network']['usd']
         usd_price = round(float(ton) * usd, 2)
         return usd_price
 
     except Exception as e:
-        print(f'\nGET TON USD PRICE (OLD) FAILED\nSome problems with ton to usd conversion. '
-              f'Check the logs!\n\nError: {e}\n')
+        print(f'Error in Get ton usd price (OLD_version). Check the logs:\n{e})')
 
 
-def convert_ton_to_usd(ton):
+async def convert_ton_to_usd(ton):
     try:
         session = requests.Session()
         session.headers.update(cmc_headers)
@@ -69,7 +69,45 @@ def convert_ton_to_usd(ton):
         return usd_price
 
     except Exception as e:
-        print(f'\nGET TON USD PRICE FAILED\nSome problems with ton to usd conversion. '
-              f'Check the logs!\n\nError:\n{e}')
-        print(f'Try to convert with old method...')
-        convert_ton_to_usd_old(ton)
+        print(f'Error in Get ton usd price. Check the logs:\n{e}')
+        print(f'Try to convert with OLD method...')
+        await convert_ton_to_usd_old(ton)
+
+
+async def keyboard_buttons(price_ton, nft_address, col_address, sale_contract_address, market_address):
+    price_nanoton = to_nano(price_ton, 'ton')
+
+    if markets[market_address] == 'Getgems' and col_address in td_collections:
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text='Getgems', url=markets_links['Getgems'] + nft_address),
+             InlineKeyboardButton(text='Diamonds', url=markets_links['Diamonds'] + nft_address)],
+            [InlineKeyboardButton(text='Купить через Tonkeeper',
+                                  url=f'https://app.tonkeeper.com/transfer/{sale_contract_address}?amount={price_nanoton}')],
+        ])
+    elif markets[market_address] == 'Getgems':
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text='Getgems', url=markets_links['Getgems'] + nft_address)],
+            [InlineKeyboardButton(text='Купить через Tonkeeper',
+                                  url=f'https://app.tonkeeper.com/transfer/{sale_contract_address}?amount={price_nanoton}')],
+        ])
+    elif markets[market_address] == 'Tonex':
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text='Tonex', url=markets_links['Tonex'] + nft_address),
+             InlineKeyboardButton(text='Getgems', url=markets_links['Getgems'] + nft_address)],
+        ])
+    elif markets[market_address] == 'Disintar':
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text='Disintar', url=markets_links['Disintar'] + nft_address),
+             InlineKeyboardButton(text='Getgems', url=markets_links['Getgems'] + nft_address)],
+            [InlineKeyboardButton(text='Купить через Tonkeeper',
+                                  url=f'https://app.tonkeeper.com/transfer/{sale_contract_address}?amount={price_nanoton}')],
+        ])
+    elif markets[market_address] == 'Diamonds':
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text='Diamonds', url=markets_links['Diamonds'] + nft_address),
+             InlineKeyboardButton(text='Getgems', url=markets_links['Getgems'] + nft_address)],
+            [InlineKeyboardButton(text='Купить через Tonkeeper',
+                                  url=f'https://app.tonkeeper.com/transfer/{sale_contract_address}?amount={price_nanoton}')],
+        ])
+
+    return keyboard

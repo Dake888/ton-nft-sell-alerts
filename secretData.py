@@ -1,4 +1,4 @@
-tonapi_token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGhlb25lbmF1bW92Il0sImV4cCI6MTgzMTEyMDIxMiwiaXNzIjoiQHRvbmFwaV9ib3QiLCJqdGkiOiJCSEJRRlZRQVNHMlIyTEhINTRCRE1MRkYiLCJzY29wZSI6ImNsaWVudCIsInN1YiI6InRvbmFwaSJ9.t3Q2yu63Ql1zAvsICOtXco1GpLSMboIMep-44JEWzNgn52VMJqyvtQaITl_MRdbWbMvZGv2s-SbAJKj9SB63AQ'
-toncenter_token = 'a30a455d0406b046d0512922c9ff0d8158c5bece24101aab57570f10db373496'
-bot_token = '5634088541:AAFkyVkicDVRDAsNq0AWoAnB68Mk4fPs1fk'
-cmc_token = '500ffec7-5e0d-460b-806f-9b3b294b773e'
+tonapi_token = ''
+toncenter_token = ''
+bot_token = ''
+cmc_token = ''

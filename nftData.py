@@ -7,7 +7,7 @@ from tonsdk.utils import from_nano
 from config import tonapi_url, tonapi_header, getgems_api_url, getgems_query
 
 
-def get_nft_data(nft_address):
+async def get_nft_data(nft_address):
     try:
         response = json.loads(requests.get(f'{tonapi_url}nft/getItems',
                                            params={'addresses': nft_address},
@@ -19,17 +19,21 @@ def get_nft_data(nft_address):
             preview_link = response['previews'][2]['url']
         if response['metadata'] != {}:
             nft_name = response['metadata']['name']
-            image_link = response['metadata']['image']
+            if 'animation_url' in response['metadata']:
+                image_link = response['metadata']['animation_url']
+                preview_link = image_link
+            else:
+                image_link = response['metadata']['image']
             if 'attributes' in response['metadata']:
                 nft_attributes = response['metadata']['attributes']
 
         return collection_address, collection_name, preview_link, nft_name, image_link, nft_attributes
 
     except Exception as e:
-        print(f'\nGET_NFT_DATA FAILED\nSome problems with {nft_address} NFT. Check the logs!\n\nError: {e}\n')
+        print(f'Error in Get NFT data. Some problems with ({nft_address}) NFT. Check the logs:\n{e}')
 
 
-def get_collection_floor(col_address):
+async def get_collection_floor(col_address):
     try:
         json_data = {'operationName': 'nftSearch',
                      'query': getgems_query,
@@ -52,5 +56,4 @@ def get_collection_floor(col_address):
             return floor_price, floor_link
 
     except Exception as e:
-        print(f'\nGET COLLECTION FLOOR FAILED\nSome problems with {col_address} collection. '
-              f'Check the logs!\n\nError: {e}\n')
+        print(f'Error in Get collection floor data. Some problems with ({col_address}) collection. Check the logs:\n{e}')
